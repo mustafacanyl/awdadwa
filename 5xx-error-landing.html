@@ -1,0 +1,72 @@
+<html>
+<head><script async src="https://www.googleoptimize.com/optimize.js?id=GTM-N4JSZJ8"></script><script>window.redwood={"consentGroups":{"C0001":true,"C0002":true,"C0003":true,"C0004":true},"country":"TR","colo":"IST","locale":"en-US"}</script>
+    <script>
+     const acceptedLocales = [
+      'en-au',
+      'en-ca',
+      'en-gb',
+      'en-in',
+      'en-us',
+      'de-de',
+      'es-es',
+      'es-la',
+      'fr-fr',
+      'it-it',
+      'ja-jp',
+      'ko-kr',
+      'pt-br',
+      'zh-tw',
+      'zh-cn',
+    ];
+    const orphanLocales = [
+      'ru-ru', 
+      'sv-se', 
+      'nl-nl', 
+      'vi-vn', 
+      'th-th', 
+      'id-id', 
+    ];
+    const ignoreList = [
+      'apps',
+      'docs',
+    ]
+    function getPathFromLocale(locale, code, pathString) {
+      if ( locale === code || !acceptedLocales.includes(code) || acceptedLocales.includes(locale) || orphanLocales.includes(locale) ) {
+        return null;
+      } else {
+        return [code, locale ? locale : '', pathString].filter(part => part !== '').join('/');
+      }
+    };
+    if (localStorage.getItem('langPreference')) {
+      if (localStorage.getItem('langPreference').toLowerCase() != 'en-us') {
+          const langPreference = localStorage.getItem('langPreference').toLowerCase();
+          const splitPath = window.location.pathname.split('/').filter(part => part !== '');
+          const currentLang = splitPath[0];
+          if (!acceptedLocales.includes(currentLang) && !ignoreList.includes(splitPath[0])) {
+            splitPath.splice(0, 0, langPreference.toLowerCase());
+            const newUrl = 'https://' + window.location.hostname + '/' + splitPath.join('/') + '/' + window.location.search;
+            window.location.replace(newUrl);    
+          } 
+        }     
+    } else if (!window.navigator.userAgent.toLowerCase().includes('googlebot')) {
+        const requestedLang = window.navigator.language;
+        const splitPath = window.location.pathname.split('/').filter(part => part !== '');
+        const maybeLocale = splitPath.shift();
+        const splitPathString = splitPath.join('/');
+      
+        if (requestedLang && requestedLang.toLowerCase() != "en-us") {
+          const requestedLangCode = requestedLang
+            .toLowerCase()
+            .replace('_', '-');
+          const redirectPath = getPathFromLocale(maybeLocale, requestedLangCode, splitPathString);
+          if (redirectPath && !ignoreList.includes(maybeLocale)) {
+            window.location.replace('https://cloudflare.com/' + redirectPath + '/' + window.location.search)
+          }
+        }
+      }
+    </script><title>301 Moved Permanently</title></head>
+<body bgcolor="white">
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx/1.10.3</center>
+</body>
+</html>
